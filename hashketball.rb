@@ -1,3 +1,4 @@
+require 'pry'
 # Write your code below game_hash
 def game_hash
   {
@@ -127,3 +128,140 @@ def game_hash
 end
 
 # Write code here
+def num_points_scored(name)
+  game_hash.find do |team, val|
+    val[:players].find do |grp|
+      if !grp[:player_name].include?(name)
+        next
+      end
+      return grp[:points]
+    end
+  end
+  return "No such team found"
+end
+
+# puts num_points_scored('Kemba')
+
+def shoe_size(name)
+  game_hash.find do |team, val|
+    val[:players].find do |grp|
+      if !grp[:player_name].include?(name)
+        next
+      end
+      return grp[:shoe]
+    end
+  end
+  return "No such team found"
+end
+
+# puts shoe_size('Kemba')
+
+def team_colors(team_name)
+  game_hash.find do |team, val|
+    if val[:team_name].include?(team_name)
+      return val[:colors]
+    else
+      next
+    end
+  end
+  return "No such team found"
+end
+
+# p team_colors("Char")
+
+def team_names
+  empty = []
+  game_hash.collect do |team, val|
+    empty << val[:team_name]
+  end
+  empty
+end
+
+# p team_names
+
+def player_numbers(team_name)
+  empty = []
+  game_hash.find do |team, val|
+    if val[:team_name].include?(team_name)
+      val[:players].collect do |grp|
+        empty << grp[:number]
+      end
+    end
+  end
+  if empty == []
+    return "No such team found"
+  else
+    return empty
+  end
+end
+
+# p player_numbers("Charlotte Hornets",)
+
+def player_stats(name)
+  game_hash.find do |team, val|
+    val[:players].find do |player|
+      if player[:player_name].include?(name)
+        return player
+      else
+        next
+      end
+    end
+  end
+  return "No such name found"
+end
+
+# puts player_stats("Alan Anderson")
+
+def big_shoe_rebounds
+  shoe = 0
+  game_hash.each do |team, val|
+    val[:players].each do |player|
+      if player[:shoe] > shoe
+        shoe = player[:shoe]
+      else
+        next
+      end
+    end
+  end
+  
+  largest_shoe_rebounds = game_hash.find do |team, val|
+    val[:players].find do |player|
+      if player[:shoe] == shoe
+        return player[:rebounds]
+      end
+    end
+  end
+  largest_shoe_rebounds
+end
+
+# puts big_shoe_rebounds
+
+def most_points_scored(game_hash)
+  points_taker = []
+  game_hash.each do |team, val|
+    val[:players].each do |inst|
+      points_taker << inst[:points]
+    end
+  end
+  max_points = points_taker.max
+
+  mvp = game_hash.each do |team, val|
+    val[:players].find do |player|
+      if(player[:points] == max_points)
+        return player[:player_name]
+      end
+    end
+  end
+  mvp
+end
+
+# p most_points_scored(game_hash)
+
+# def winning_team(game_hash)
+#   game_hash.each do |team|
+#     team
+#     binding.pry
+#   end
+# end
+
+# p winning_team(game_hash)
